@@ -511,11 +511,19 @@ class _PatchingASTWalker:
                 children.append(",")
             self._add_args_to_children(children, arg, default)
         if node.vararg is not None:
-            if args:
+            if children:
                 children.append(",")
             children.extend(["*", node.vararg.arg])
+        if node.kwonlyargs:
+            if children:
+                children.append(",")
+            if not node.vararg:
+                children.append("*")
+            for arg, default in zip(node.kwonlyargs, node.kw_defaults):
+                children.append(",")
+                self._add_args_to_children(children, arg, default)
         if node.kwarg is not None:
-            if args or node.vararg is not None:
+            if children:
                 children.append(",")
             children.extend(["**", node.kwarg.arg])
         self._handle(node, children)
