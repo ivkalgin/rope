@@ -515,9 +515,9 @@ class _PatchingASTWalker:
                 children.append(",")
             children.extend(["*", node.vararg.arg])
         if node.kwonlyargs:
-            if children:
-                children.append(",")
             if not node.vararg:
+                if children:
+                    children.append(",")
                 children.append("*")
             for arg, default in zip(node.kwonlyargs, node.kw_defaults):
                 children.append(",")
