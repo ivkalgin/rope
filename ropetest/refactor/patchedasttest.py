@@ -530,6 +530,18 @@ class PatchedASTTest(unittest.TestCase):
             "arguments", ["*", "", "args", "", ",", " ", "**", "", "kwds"]
         )
 
+    def test_kwonlyargs(self):
+        source = dedent('''\
+            def f(*, p1):
+                """docs"""
+                pass
+        ''')
+        ast_frag = patchedast.get_patched_ast(source, True)
+        checker = _ResultChecker(self, ast_frag)
+        checker.check_children(
+            "arguments", ["*", "", ",", " ", "arg"]
+        )
+
     def test_function_node(self):
         source = dedent("""\
             def f():
